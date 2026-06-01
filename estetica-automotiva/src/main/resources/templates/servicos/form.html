@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servico</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: topbar}"></div>
+<main class="panel">
+    <h1>Tipo de servico</h1>
+    <form th:action="${editando} ? @{/servicos/{id}/editar(id=${servico.id})} : @{/servicos}" th:object="${servico}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <label>Nome</label>
+        <input th:field="*{nome}" required>
+        <label>Descricao detalhada</label>
+        <textarea th:field="*{descricao}" required></textarea>
+        <div class="grid">
+            <div>
+                <label>Preco vigente</label>
+                <input th:field="*{preco}" type="number" min="0" step="0.01" required>
+            </div>
+            <div>
+                <label>Duracao em minutos</label>
+                <input th:field="*{duracaoMinutos}" type="number" min="15" step="15" required>
+            </div>
+        </div>
+        <input type="hidden" name="ativo" value="false">
+        <label class="checkbox-line">
+            <input name="ativo" th:checked="*{ativo}" type="checkbox" value="true">
+            <span>Servico ativo para agendamento</span>
+        </label>
+        <div class="actions">
+            <button type="submit">Salvar</button>
+            <a class="btn secondary" th:href="@{/servicos}">Cancelar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha conta</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: topbar}"></div>
+<main class="panel">
+    <h1>Minha conta</h1>
+    <p class="success" th:if="${param.sucesso}">Dados atualizados com sucesso.</p>
+    <p class="muted">Edite apenas seus proprios dados cadastrais.</p>
+    <form th:action="@{/minha-conta}" th:object="${cliente}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <input type="hidden" th:field="*{consentimentoLgpd}">
+        <div class="grid">
+            <div><label>Nome</label><input th:field="*{nome}" required></div>
+            <div><label>CPF</label><input th:field="*{cpf}" maxlength="11" required></div>
+            <div><label>Telefone</label><input th:field="*{telefone}" required></div>
+            <div><label>E-mail</label><input th:field="*{email}" type="email" required></div>
+        </div>
+        <label>Placas</label>
+        <input name="placasTexto" th:value="${placasTexto}" placeholder="ABC1D23, XYZ9A87">
+        <div class="actions">
+            <button type="submit">Salvar dados</button>
+            <a class="btn secondary" th:href="@{/agendamentos}">Voltar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

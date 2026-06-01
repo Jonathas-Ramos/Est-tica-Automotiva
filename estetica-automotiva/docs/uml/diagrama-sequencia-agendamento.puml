@@ -1,0 +1,32 @@
+@startuml
+title Diagrama de Sequencia - Agendamento de Servico
+
+actor Cliente
+boundary "View Thymeleaf" as View
+control "AgendamentoController" as Controller
+control "AgendamentoService" as Service
+control "TipoServicoService" as TipoService
+database "MongoDB Atlas" as Mongo
+
+Cliente -> View: Seleciona servico, placa, data e hora
+View -> Controller: POST /agendamentos
+Controller -> Mongo: Busca cliente pelo e-mail autenticado
+Mongo --> Controller: Cliente
+Controller -> Service: agendar(cliente, tipoServicoId, placa, inicio)
+Service -> TipoService: buscar(tipoServicoId)
+TipoService -> Mongo: Consulta tipo de servico
+Mongo --> TipoService: TipoServico
+TipoService --> Service: TipoServico
+Service -> Service: Calcula fim = inicio + duracao
+Service -> Mongo: Procura agendamentos sobrepostos
+Mongo --> Service: Lista de conflitos
+alt Sem conflito
+  Service -> Mongo: Salva agendamento
+  Mongo --> Service: Agendamento salvo
+  Service --> Controller: Sucesso
+  Controller --> View: Redirect /agendamentos
+else Com conflito
+  Service --> Controller: Erro de horario indisponivel
+  Controller --> View: Mostra mensagem de erro
+end
+@enduml

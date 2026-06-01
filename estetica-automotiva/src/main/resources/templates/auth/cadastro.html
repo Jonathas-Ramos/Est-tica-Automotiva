@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro - Estetica Automotiva</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<main class="auth panel">
+    <h1>Cadastro do cliente</h1>
+    <p class="error" th:if="${erro}" th:text="${erro}"></p>
+    <form th:action="@{/cadastro}" th:object="${cliente}" method="post">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+        <label>Nome</label>
+        <input th:field="*{nome}" required>
+        <label>CPF</label>
+        <input th:field="*{cpf}" maxlength="11" placeholder="Somente numeros" required>
+        <label>Telefone</label>
+        <input th:field="*{telefone}" required>
+        <label>E-mail</label>
+        <input th:field="*{email}" type="email" required>
+        <label>Senha</label>
+        <input name="senha" type="password" minlength="6" required>
+        <label>Placas dos veiculos</label>
+        <input name="placasTexto" placeholder="ABC1D23, XYZ9A87">
+        <section class="terms-box" aria-label="Termos de consentimento LGPD">
+            <h2>Termos de consentimento LGPD</h2>
+            <p>
+                Ao criar o cadastro, o cliente autoriza a Estetica Automotiva a coletar e tratar seus dados pessoais
+                exclusivamente para identificacao, contato, controle de veiculos e agendamento de servicos.
+            </p>
+            <ul>
+                <li>Dados coletados: nome, CPF, telefone, e-mail e placas dos veiculos informados.</li>
+                <li>Finalidade: cadastro do cliente, comunicacao sobre agendamentos e execucao dos servicos contratados.</li>
+                <li>Seguranca: a senha e armazenada com criptografia BCrypt e as credenciais do banco nao ficam no codigo-fonte.</li>
+                <li>Privacidade: CPF e telefone sao exibidos parcialmente nas listas administrativas.</li>
+                <li>Compartilhamento: os dados nao devem ser compartilhados com terceiros sem base legal ou consentimento.</li>
+                <li>Direitos do titular: o cliente pode solicitar correcao, exclusao definitiva e informacoes sobre o uso de seus dados.</li>
+                <li>Retencao: os dados permanecem no sistema enquanto forem necessarios para atendimento, registro e obrigacoes legais.</li>
+            </ul>
+        </section>
+        <label class="checkbox-line">
+            <input th:field="*{consentimentoLgpd}" type="checkbox" required>
+            <span>Li os termos acima e concordo com o uso dos meus dados para cadastro, atendimento e agendamento, conforme a LGPD.</span>
+        </label>
+        <div class="actions">
+            <button type="submit">Cadastrar</button>
+            <a class="btn secondary" th:href="@{/login}">Voltar</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>

@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Servicos</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: topbar}"></div>
+<main>
+    <section class="panel">
+        <h1>Tipos de servico</h1>
+        <div class="actions">
+            <a class="btn" th:href="@{/servicos/novo}">Novo servico</a>
+        </div>
+        <table>
+            <thead>
+            <tr><th>Nome</th><th>Descricao</th><th>Preco</th><th>Duracao</th><th>Status</th><th>Acoes</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="servico : ${servicos}">
+                <td th:text="${servico.nome}"></td>
+                <td th:text="${servico.descricao}"></td>
+                <td th:text="${#numbers.formatCurrency(servico.preco)}"></td>
+                <td th:text="${servico.duracaoMinutos + ' min'}"></td>
+                <td th:text="${servico.ativo ? 'Ativo' : 'Inativo'}"></td>
+                <td><a class="btn secondary" th:href="@{/servicos/{id}/editar(id=${servico.id})}">Editar</a></td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

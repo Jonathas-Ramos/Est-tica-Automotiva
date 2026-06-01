@@ -1,0 +1,83 @@
+@startuml
+skinparam packageStyle rectangle
+title Diagrama de Classes - Estetica Automotiva
+
+package "br.com.estetica.automotiva.model" {
+  class Usuario {
+    - id: String
+    - email: String
+    - senhaHash: String
+    - role: Role
+    - ativo: boolean
+  }
+
+  class Cliente {
+    - id: String
+    - nome: String
+    - cpf: String
+    - telefone: String
+    - email: String
+    - placas: List<String>
+    - consentimentoLgpd: boolean
+    + cpfParcial(): String
+    + telefoneParcial(): String
+  }
+
+  class TipoServico {
+    - id: String
+    - nome: String
+    - descricao: String
+    - preco: BigDecimal
+    - duracaoMinutos: int
+    - ativo: boolean
+  }
+
+  class Agendamento {
+    - id: String
+    - clienteId: String
+    - tipoServicoId: String
+    - placaVeiculo: String
+    - dataHoraInicio: LocalDateTime
+    - dataHoraFim: LocalDateTime
+    - status: StatusAgendamento
+    - observacoes: String
+  }
+
+  enum Role {
+    CLIENTE
+    GESTOR
+  }
+
+  enum StatusAgendamento {
+    AGENDADO
+    CANCELADO
+    CONCLUIDO
+  }
+}
+
+package "controller" {
+  class AuthController
+  class ClienteController
+  class TipoServicoController
+  class AgendamentoController
+}
+
+package "service" {
+  class UsuarioService
+  class ClienteService
+  class TipoServicoService
+  class AgendamentoService
+}
+
+Usuario --> Role
+Agendamento --> StatusAgendamento
+Cliente "1" --> "0..*" Agendamento : agenda
+TipoServico "1" --> "0..*" Agendamento : define duracao/preco
+AuthController --> ClienteService
+ClienteController --> ClienteService
+TipoServicoController --> TipoServicoService
+AgendamentoController --> AgendamentoService
+AgendamentoController --> ClienteService
+AgendamentoController --> TipoServicoService
+ClienteService --> UsuarioService
+@enduml

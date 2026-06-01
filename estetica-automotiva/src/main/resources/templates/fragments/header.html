@@ -1,0 +1,14 @@
+<header th:fragment="topbar" xmlns:th="http://www.thymeleaf.org" xmlns:sec="https://www.thymeleaf.org/extras/spring-security">
+    <strong>Estetica Automotiva</strong>
+    <nav>
+        <a th:href="@{/agendamentos}" sec:authorize="hasRole('CLIENTE')">Meus agendamentos</a>
+        <a th:href="@{/minha-conta}" sec:authorize="hasRole('CLIENTE')">Minha conta</a>
+        <a th:href="@{/gestor/agenda}" sec:authorize="hasRole('GESTOR')">Agenda</a>
+        <a th:href="@{/clientes}" sec:authorize="hasRole('GESTOR')">Clientes</a>
+        <a th:href="@{/servicos}" sec:authorize="hasRole('GESTOR')">Servicos</a>
+        <form th:action="@{/logout}" method="post" style="display:inline">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+            <button type="submit">Sair</button>
+        </form>
+    </nav>
+</header>

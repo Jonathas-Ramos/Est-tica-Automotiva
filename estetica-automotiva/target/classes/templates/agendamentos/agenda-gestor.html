@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda do gestor</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: topbar}"></div>
+<main>
+    <section class="panel">
+        <h1>Controle da agenda</h1>
+        <form class="actions" th:action="@{/gestor/agenda}" method="get">
+            <input type="date" name="data" th:value="${data}">
+            <select name="visao">
+                <option value="dia" th:selected="${visao == 'dia'}">Diaria</option>
+                <option value="semana" th:selected="${visao == 'semana'}">Semanal</option>
+                <option value="proximos" th:selected="${visao == 'proximos'}">Proximos</option>
+            </select>
+            <select name="tipoServicoId">
+                <option value="">Todos os servicos</option>
+                <option th:each="servico : ${servicos}"
+                        th:value="${servico.id}"
+                        th:selected="${tipoServicoId == servico.id}"
+                        th:text="${servico.nome}"></option>
+            </select>
+            <button type="submit">Filtrar</button>
+        </form>
+        <p class="muted" th:if="${visao == 'proximos'}">Mostrando os proximos agendamentos confirmados a partir de agora.</p>
+        <table>
+            <thead>
+            <tr><th>Inicio</th><th>Fim</th><th>Cliente</th><th>Servico</th><th>Placa</th><th>Status</th><th>Acoes</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="ag : ${agendamentos}">
+                <td th:text="${#temporals.format(ag.dataHoraInicio, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${#temporals.format(ag.dataHoraFim, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${clientesPorId[ag.clienteId]?.nome ?: 'Cliente removido'}"></td>
+                <td th:text="${servicosPorId[ag.tipoServicoId]?.nome ?: 'Servico removido'}"></td>
+                <td th:text="${ag.placaVeiculo}"></td>
+                <td th:text="${ag.status}"></td>
+                <td>
+                    <a class="btn secondary" th:if="${ag.status.name() == 'AGENDADO'}" th:href="@{/gestor/agendamentos/{id}/editar(id=${ag.id})}">Editar</a>
+                    <form th:if="${ag.status.name() == 'AGENDADO'}" th:action="@{/gestor/agendamentos/{id}/cancelar(id=${ag.id})}" method="post" style="display:inline">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="voltar" value="/gestor/agenda">
+                        <button class="danger" type="submit">Cancelar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>

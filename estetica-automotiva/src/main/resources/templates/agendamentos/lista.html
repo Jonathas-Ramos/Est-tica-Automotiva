@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="pt-BR" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meus agendamentos</title>
+    <link rel="stylesheet" th:href="@{/css/app.css}">
+</head>
+<body>
+<div th:replace="~{fragments/header :: topbar}"></div>
+<main>
+    <section class="panel">
+        <h1>Meus agendamentos</h1>
+        <div class="actions">
+            <a class="btn" th:href="@{/agendamentos/novo}">Novo agendamento</a>
+        </div>
+        <table>
+            <thead>
+            <tr><th>Servico</th><th>Placa</th><th>Inicio</th><th>Fim</th><th>Status</th><th>Acoes</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="ag : ${agendamentos}">
+                <td th:text="${servicosPorId[ag.tipoServicoId]?.nome ?: 'Servico removido'}"></td>
+                <td th:text="${ag.placaVeiculo}"></td>
+                <td th:text="${#temporals.format(ag.dataHoraInicio, 'dd/MM/yyyy HH:mm')}"></td>
+                <td th:text="${#temporals.format(ag.dataHoraFim, 'HH:mm')}"></td>
+                <td th:text="${ag.status}"></td>
+                <td>
+                    <a class="btn secondary" th:if="${ag.status.name() == 'AGENDADO'}" th:href="@{/agendamentos/{id}/editar(id=${ag.id})}">Editar</a>
+                    <form th:if="${ag.status.name() == 'AGENDADO'}" th:action="@{/agendamentos/{id}/cancelar(id=${ag.id})}" method="post" style="display:inline">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">
+                        <input type="hidden" name="voltar" value="/agendamentos">
+                        <button class="danger" type="submit">Cancelar</button>
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </section>
+</main>
+</body>
+</html>
