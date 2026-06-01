@@ -87,10 +87,8 @@ O sistema registra consentimento no cadastro, usa hash BCrypt para senhas e evit
 
 ## Diagramas UML
 
+<img width="850" height="460" alt="image" src="https://github.com/user-attachments/assets/6e170b64-5a13-4a28-a693-d94c3bcb369e" />
+
+<img width="839" height="503" alt="image" src="https://github.com/user-attachments/assets/3ce59a06-95ae-4d17-8661-503497d3b450" />
 
 
-
-git branch -M main
-git remote add origin https://github.com/SEU_USUARIO/estetica-automotiva.git
-git push -u origin main
-```
